@@ -262,26 +262,24 @@ public class RconClient : IRconClient
                     var elapsed = Environment.TickCount64 - last;
                     if (elapsed < 0) elapsed = long.MaxValue;
 
-                    if (elapsed >= (long)_idleDisconnectTimeout.TotalMilliseconds)
+                    if (elapsed < (long)_idleDisconnectTimeout.TotalMilliseconds) continue;
+                    if (!await _connectLock.WaitAsync(0, token).ConfigureAwait(false)) continue;
+
+                    try
                     {
-                        if (!await _sendLock.WaitAsync(0, token)) continue;
+                        last = Interlocked.Read(ref _lastRequestTick);
+                        elapsed = Environment.TickCount64 - last;
+                        if (elapsed < 0) elapsed = long.MaxValue;
 
-                        try
+                        if (_stream is not null && elapsed >= (long)_idleDisconnectTimeout.TotalMilliseconds)
                         {
-                            last = Interlocked.Read(ref _lastRequestTick);
-                            elapsed = Environment.TickCount64 - last;
-                            if (elapsed < 0) elapsed = long.MaxValue;
-
-                            if (_stream is not null && elapsed >= (long)_idleDisconnectTimeout.TotalMilliseconds)
-                            {
-                                await DisconnectAsync(CancellationToken.None).ConfigureAwait(false);
-                                return;
-                            }
+                            await DisconnectCoreAsync(CancellationToken.None).ConfigureAwait(false);
+                            return;
                         }
-                        finally
-                        {
-                            if (_sendLock.CurrentCount == 0) _sendLock.Release();
-                        }
+                    }
+                    finally
+                    {
+                        _connectLock.Release();
                     }
                 }
             }
