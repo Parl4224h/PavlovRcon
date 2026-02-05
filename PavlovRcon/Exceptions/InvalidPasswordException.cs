@@ -3,6 +3,7 @@ namespace PavlovRcon.Exceptions;
 /// <summary>
 /// Exception thrown when the provided password is invalid.
 /// </summary>
+[Serializable]
 public class InvalidPasswordException : Exception
 {
     /// <summary>
