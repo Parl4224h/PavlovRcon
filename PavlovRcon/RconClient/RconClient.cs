@@ -5,6 +5,7 @@ using System.Text;
 using System.Text.Json;
 using PavlovRcon.Commands;
 using PavlovRcon.Config;
+using PavlovRcon.Exceptions;
 
 namespace PavlovRcon.RconClient;
 
@@ -62,7 +63,7 @@ public class RconClient : IRconClient
     }
 
     /// <inheritdoc />
-    /// TODO: add exceptions for custom ones later
+    /// <exception cref="InvalidPasswordException">Thrown when the server rejects the password</exception>
     public async Task ConnectAsync(CancellationToken ct = default)
     {
         if (_stream is not null) return;
@@ -86,7 +87,7 @@ public class RconClient : IRconClient
                 authLine.Contains("Authenticated=0", StringComparison.OrdinalIgnoreCase))
             {
                 await DisconnectCoreAsync(ct).ConfigureAwait(false); // <- use core
-                throw new InvalidOperationException("Authentication failed");
+                throw new InvalidPasswordException("Invalid password.");
             }
 
             StartIdleMonitor();
@@ -98,7 +99,6 @@ public class RconClient : IRconClient
     }
 
     /// <inheritdoc />
-    /// TODO: add exceptions for custom ones later
     public async Task DisconnectAsync(CancellationToken ct = default)
     {
         await _connectLock.WaitAsync(ct).ConfigureAwait(false);
@@ -114,7 +114,9 @@ public class RconClient : IRconClient
 
 
     /// <inheritdoc />
-    /// TODO: add exceptions for custom ones later
+    /// <exception cref="NotConnectedException">Thrown when the client is not connected to the server and AutoConnect is disabled</exception>
+    /// <exception cref="InvalidResponseException">Thrown when the server sends a response that fails to be parsed</exception>
+    /// <exception cref="TimeoutException">Thrown when the server does not respond to the command within the specified timeout</exception>
     public async Task<TResponse> SendCommandAsync<TResponse>(IRconCommand<TResponse> rconCommand,
         CancellationToken ct = default)
     {
@@ -126,8 +128,8 @@ public class RconClient : IRconClient
             }
             else
             {
-                // TODO: create custom exception
-                throw new InvalidOperationException("Not connected");
+                throw new NotConnectedException(
+                    "Not connected. Call ConnectAsync() first, or set AutoConnect to true in the constructor.");
             }
         }
 
@@ -151,8 +153,7 @@ public class RconClient : IRconClient
 
             if (result is null)
             {
-                // TODO: create custom exception
-                throw new InvalidOperationException($"Failed to deserialize response: {json}");
+                throw new InvalidResponseException($"Response was not valid JSON: {json}");
             }
 
             TouchActivity();
@@ -160,7 +161,6 @@ public class RconClient : IRconClient
         }
         catch (OperationCanceledException) when (!ct.IsCancellationRequested)
         {
-            // TODO: create custom exception
             throw new TimeoutException("Command timed out");
         }
         finally
