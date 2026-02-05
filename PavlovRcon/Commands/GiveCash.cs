@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// GiveCash command, gives cash to a player.
 /// </summary>
-public class GiveCash : RconCommand<string>
+public class GiveCash : RconCommand<GiveCashResponse>
 {
     /// <summary>
     /// Creates a new GiveCash command.

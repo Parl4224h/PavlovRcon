@@ -1,11 +1,12 @@
 ﻿using PavlovRcon.GameData;
+using PavlovRcon.Responses;
 
 namespace PavlovRcon.Commands;
 
 /// <summary>
 /// SwitchMap command, switches to a specified map.
 /// </summary>
-public class SwitchMap : RconCommand<string>
+public class SwitchMap : RconCommand<SwitchMapResponse>
 {
     /// <summary>
     /// Creates a new SwitchMap command.

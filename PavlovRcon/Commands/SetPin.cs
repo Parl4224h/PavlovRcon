@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// SetPin command, sets the pin for the server.
 /// </summary>
-public class SetPin : RconCommand<string>
+public class SetPin : RconCommand<RconOkResponse>
 {
     /// <summary>
     /// Creates a new SetPin command.

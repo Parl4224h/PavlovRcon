@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// Teleport command, teleports a player to another player.
 /// </summary>
-public class Teleport : RconCommand<string>
+public class Teleport : RconCommand<TeleportResponse>
 {
     /// <summary>
     /// Creates a new Teleport command.

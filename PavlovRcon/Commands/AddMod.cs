@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// The AddMod command.
 /// </summary>
-public class AddMod : RconCommand<string>
+public class AddMod : RconCommand<AddModResponse>
 {
     /// <summary>
     /// Creates a new AddMod command.

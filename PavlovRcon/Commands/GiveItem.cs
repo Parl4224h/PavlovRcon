@@ -1,11 +1,12 @@
 ﻿using PavlovRcon.GameData;
+using PavlovRcon.Responses;
 
 namespace PavlovRcon.Commands;
 
 /// <summary>
 /// GiveItem command, gives a player an item.
 /// </summary>
-public class GiveItem : RconCommand<string>
+public class GiveItem : RconCommand<GiveItemResponse>
 {
     /// <summary>
     /// Creates a new GiveItem command. Allows for custom items.

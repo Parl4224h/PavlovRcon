@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// SetPlayerSkin command, sets the skin of a player.
 /// </summary>
-public class SetPlayerSkin : RconCommand<string>
+public class SetPlayerSkin : RconCommand<SetPlayerSkinResponse>
 {
     /// <summary>
     /// Create a new SetPlayerSkin command.

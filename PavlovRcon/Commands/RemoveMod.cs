@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// The RemoveMod command removes a mod from the server.
 /// </summary>
-public class RemoveMod : RconCommand<string>
+public class RemoveMod : RconCommand<RemoveModResponse>
 {
     /// <summary>
     /// Creates a new RemoveMod command.

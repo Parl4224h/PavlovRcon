@@ -1,11 +1,12 @@
 ﻿using PavlovRcon.GameData;
+using PavlovRcon.Responses;
 
 namespace PavlovRcon.Commands;
 
 /// <summary>
 /// GiveAll command gives all players on a team the specified ammo.
 /// </summary>
-public class GiveAll : RconCommand<string>
+public class GiveAll : RconCommand<GiveAllResponse>
 {
     /// <summary>
     /// Creates a new GiveAll command. Allows for custom items.

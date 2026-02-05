@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// ClearEmptyVehicles command, removes all vehicles not occupied by players.
 /// </summary>
-public class ClearEmptyVehicles : RconCommand<string>
+public class ClearEmptyVehicles : RconCommand<RconOkResponse>
 {
     /// <summary>
     /// Creates a new ClearEmptyVehicles command.

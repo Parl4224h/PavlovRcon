@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// SetCash command, sets the cash of a player.
 /// </summary>
-public class SetCash : RconCommand<string>
+public class SetCash : RconCommand<SetCashResponse>
 {
     /// <summary>
     /// Creates a new SetCash command.

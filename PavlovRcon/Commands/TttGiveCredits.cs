@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// TttGiveCredits command, gives a player credits.
 /// </summary>
-public class TttGiveCredits : RconCommand<string>
+public class TttGiveCredits : RconCommand<TttGiveCreditsResponse>
 {
     /// <summary>
     /// Creates a new TttGiveCredits command.

@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// UpdateServerName command, updates the server name.
 /// </summary>
-public class UpdateServerName : RconCommand<string>
+public class UpdateServerName : RconCommand<UpdateServerNameResponse>
 {
     /// <summary>
     /// Creates a new UpdateServerName command.

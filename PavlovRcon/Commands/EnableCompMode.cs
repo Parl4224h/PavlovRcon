@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// EnableCompMode command, enables or disables competitive mode.
 /// </summary>
-public class EnableCompMode : RconCommand<string>
+public class EnableCompMode : RconCommand<EnableCompModeResponse>
 {
     /// <summary>
     /// Creates a new EnableCompMode command.

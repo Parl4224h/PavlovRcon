@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// TTTAlwaysEnableSkinMenu command, enables or disables the always enable skin menu feature.
 /// </summary>
-public class TttAlwaysEnableSkinMenu : RconCommand<string>
+public class TttAlwaysEnableSkinMenu : RconCommand<TttAlwaysEnableSkinMenuResponse>
 {
     /// <summary>
     /// Creates a new TTTAlwaysEnableSkinMenu command.

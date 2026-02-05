@@ -1,5 +1,8 @@
-﻿namespace PavlovRcon.GameData;
+﻿using System.Text.Json.Serialization;
 
+namespace PavlovRcon.GameData;
+
+[JsonConverter(typeof(RconIdEnumJsonConverter<AmmoType>))]
 public enum AmmoType
 {
     [RconId("0")]
@@ -13,5 +16,5 @@ public enum AmmoType
     [RconId("4")]
     LimitedSpecial,
     [RconId("5")]
-    Boxles
+    Boxless
 }

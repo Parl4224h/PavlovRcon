@@ -1,8 +1,11 @@
-﻿namespace PavlovRcon.GameData;
+﻿using System.Text.Json.Serialization;
+
+namespace PavlovRcon.GameData;
 
 /// <summary>
 /// Game modes supported by the game.
 /// </summary>
+[JsonConverter(typeof(RconIdEnumJsonConverter<GameMode>))]
 public enum GameMode
 {
     /// <summary>

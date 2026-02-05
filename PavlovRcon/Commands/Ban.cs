@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// Bans a player.
 /// </summary>
-public class Ban : RconCommand<string>
+public class Ban : RconCommand<BanResponse>
 {
     /// <summary>
     /// Creates a new Ban command.

@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// RefreshList command, retrieves a list of all connected players and information about them.
 /// </summary>
-public class RefreshList : RconCommand<string>
+public class RefreshList : RconCommand<RefreshListResponse>
 {
     /// <summary>
     /// Creates a new RefreshList command.

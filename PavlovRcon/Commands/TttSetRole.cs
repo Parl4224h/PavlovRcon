@@ -1,11 +1,12 @@
 ﻿using PavlovRcon.GameData;
+using PavlovRcon.Responses;
 
 namespace PavlovRcon.Commands;
 
 /// <summary>
 /// TttSetRole command sets the role of a player in TTT.
 /// </summary>
-public class TttSetRole : RconCommand<string>
+public class TttSetRole : RconCommand<TttSetRoleResponse>
 {
     /// <summary>
     /// Creates a new TttSetRole command.

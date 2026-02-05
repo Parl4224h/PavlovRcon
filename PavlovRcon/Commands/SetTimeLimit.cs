@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// SetTimeLimit command, sets the time limit.
 /// </summary>
-public class SetTimeLimit : RconCommand<string>
+public class SetTimeLimit : RconCommand<SetTimeLimitResponse>
 {
     /// <summary>
     /// Create a new SetTimeLimit command.

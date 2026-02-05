@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// The UgcAddMod command adds a mod to the server
 /// </summary>
-public class UgcAddMod : RconCommand<string>
+public class UgcAddMod : RconCommand<UgcModResponse>
 {
     /// <summary>
     /// Creates a new UgcAddMod command.

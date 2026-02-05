@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// TttEndRound command, ends the current round.
 /// </summary>
-public class TttEndRound : RconCommand<string>
+public class TttEndRound : RconCommand<RconOkResponse>
 {
     /// <summary>
     /// Creates a new TttEndRound command.

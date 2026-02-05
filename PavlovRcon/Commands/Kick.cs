@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// Kick command, kicks a player from the server.
 /// </summary>
-public class Kick : RconCommand<string>
+public class Kick : RconCommand<KickResponse>
 {
     /// <summary>
     /// Creates a new Kick command.

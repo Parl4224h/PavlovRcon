@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// ShutdownServer command, shuts down the server.
 /// </summary>
-public class ShutdownServer : RconCommand<string>
+public class ShutdownServer : RconCommand<RconOkResponse>
 {
     /// <summary>
     /// Creates a new ShutdownServer command.

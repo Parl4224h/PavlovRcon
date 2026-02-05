@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// TTTSetKarma command, sets the karma of a player.
 /// </summary>
-public class TttSetKarma : RconCommand<string>
+public class TttSetKarma : RconCommand<TttSetKarmaResponse>
 {
     /// <summary>
     /// Sets the karma of a player.

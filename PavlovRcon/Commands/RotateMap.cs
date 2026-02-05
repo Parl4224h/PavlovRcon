@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// RotateMap command, rotates the map.
 /// </summary>
-public class RotateMap : RconCommand<string>
+public class RotateMap : RconCommand<RotateMapResponse>
 {
     /// <summary>
     /// Creates a new RotateMap command.

@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// TttPauseTimer command, pauses or unpauses the timer.
 /// </summary>
-public class TttPauseTimer : RconCommand<string>
+public class TttPauseTimer : RconCommand<TttPauseTimerResponse>
 {
     /// <summary>
     /// Creates a new TttPauseTimer command.

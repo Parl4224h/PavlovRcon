@@ -1,11 +1,12 @@
 ﻿using PavlovRcon.GameData;
+using PavlovRcon.Responses;
 
 namespace PavlovRcon.Commands;
 
 /// <summary>
 /// The RemoveMapRotation command, removes a map from the rotation.
 /// </summary>
-public class RemoveMapRotation : RconCommand<string>
+public class RemoveMapRotation : RconCommand<RconOkResponse>
 {
     /// <summary>
     /// Creates a new RemoveMapRotation command.

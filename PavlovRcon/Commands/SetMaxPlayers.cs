@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// SetMaxPlayers command, sets the max players.
 /// </summary>
-public class SetMaxPlayers : RconCommand<string>
+public class SetMaxPlayers : RconCommand<SetMaxPlayersResponse>
 {
     /// <summary>
     /// Creates a new SetMaxPlayers command.

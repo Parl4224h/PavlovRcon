@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// InspectPlayer command, inspects a player.
 /// </summary>
-public class InspectPlayer : RconCommand<string>
+public class InspectPlayer : RconCommand<InspectPlayerResponse>
 {
     /// <summary>
     /// Creates a new InspectPlayer command.

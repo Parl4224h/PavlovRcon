@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// GiveTeamCash command, gives cash to a team.
 /// </summary>
-public class GiveTeamCash : RconCommand<string>
+public class GiveTeamCash : RconCommand<GiveTeamCashResponse>
 {
     /// <summary>
     /// Creates a new GiveTeamCash command.

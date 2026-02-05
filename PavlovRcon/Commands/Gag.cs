@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// Gag command, gags or ungags a player.
 /// </summary>
-public class Gag : RconCommand<string>
+public class Gag : RconCommand<GagResponse>
 {
     /// <summary>
     /// Creates a new Gag command.

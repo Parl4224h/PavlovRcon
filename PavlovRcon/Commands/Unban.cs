@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// Unban command, unbans a player.
 /// </summary>
-public class Unban : RconCommand<string>
+public class Unban : RconCommand<UnbanResponse>
 {
     /// <summary>
     /// Creates a new Unban command.

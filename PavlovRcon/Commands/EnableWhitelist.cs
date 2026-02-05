@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// EnableWhitelist command, enables or disables the whitelist.
 /// </summary>
-public class EnableWhitelist : RconCommand<string>
+public class EnableWhitelist : RconCommand<EnableWhitelistResponse>
 {
     /// <summary>
     /// Creates a new EnableWhitelist command.

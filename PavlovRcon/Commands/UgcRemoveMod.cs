@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// The UgcRemoveMod command removes a mod from the server.
 /// </summary>
-public class UgcRemoveMod : RconCommand<string>
+public class UgcRemoveMod : RconCommand<UgcModResponse>
 {
     /// <summary>
     /// Creates a new UgcRemoveMod command.

@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// EnableVerboseLogging command, enables or disables verbose logging.
 /// </summary>
-public class EnableVerboseLogging : RconCommand<string>
+public class EnableVerboseLogging : RconCommand<EnableVerboseLoggingResponse>
 {
     /// <summary>
     /// Creates a new EnableVerboseLogging command.

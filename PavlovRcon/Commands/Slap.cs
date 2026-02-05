@@ -1,9 +1,11 @@
-﻿namespace PavlovRcon.Commands;
+﻿using PavlovRcon.Responses;
+
+namespace PavlovRcon.Commands;
 
 /// <summary>
 /// Slap command, deals damage to a player.
 /// </summary>
-public class Slap : RconCommand<string>
+public class Slap : RconCommand<SlapResponse>
 {
     /// <summary>
     /// Create a new Slap command.
