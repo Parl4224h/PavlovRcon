@@ -5,6 +5,8 @@
         <ImplicitUsings>enable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
+        <PackageId>PavlovRcon</PackageId>
+        <Authors>Parl4224h</Authors>
     </PropertyGroup>
 
 </Project>
