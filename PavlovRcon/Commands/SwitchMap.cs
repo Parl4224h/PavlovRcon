@@ -11,10 +11,13 @@ public class SwitchMap : RconCommand<string>
     /// Creates a new SwitchMap command.
     /// </summary>
     /// <param name="map">The name of the map to switch to.</param>
-    /// <param name="gameMode">The game mode to start the map with.</param>
-    public SwitchMap(string map, GameMode gameMode) : base("SwitchMap")
+    /// <param name="gameMode">The game mode to start the map with. Defaults to Team Deathmatch if not specified"/></param>
+    public SwitchMap(string map, GameMode? gameMode) : base("SwitchMap")
     {
         Add(map);
-        Add(gameMode.ToRconId());
+        if (gameMode.HasValue)
+        {
+            Add(gameMode.ToRconId());
+        }
     }
 }

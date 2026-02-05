@@ -8,5 +8,5 @@ public class ResetSnd : RconCommand<string>
     /// <summary>
     /// Creates a new ResetSnd command.
     /// </summary>
-    public ResetSnd() : base("ResetSnd") { }
+    public ResetSnd() : base("ResetSND") { }
 }
