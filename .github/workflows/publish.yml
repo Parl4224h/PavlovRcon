@@ -1,0 +1,98 @@
+name: Publish packages
+
+on:
+  push:
+    tags:
+      - 'v*'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  packages: write
+
+jobs:
+  pack-and-publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '10.0.x'
+          cache: true
+          cache-dependency-path: '**/packages.lock.json'
+
+      - name: Extract version from tag
+        id: get_version
+        shell: bash
+        run: |
+          ref="${GITHUB_REF##*/}"   # e.g., v1.2.3
+          ver="${ref#v}"            # -> 1.2.3
+          echo "version=$ver" >> "$GITHUB_OUTPUT"
+
+      - name: Create CI NuGet.config
+        run: |
+          cat > ./nuget.ci.config <<EOF
+          <?xml version="1.0" encoding="utf-8"?>
+          <configuration>
+            <packageSources>
+              <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
+            </packageSources>
+          </configuration>
+          EOF
+
+      - name: Add GitHub Packages source (isolated)
+        env:
+          OWNER:  ${{ github.repository_owner }}
+          ACTOR:  ${{ github.actor }}
+          TOKEN:  ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          dotnet nuget add source "https://nuget.pkg.github.com/${OWNER}/index.json" \
+            --username "$ACTOR" \
+            --password "$TOKEN" \
+            --store-password-in-clear-text \
+            --name "github-${OWNER}" \
+            --configfile ./nuget.ci.config
+
+      # Ensure cache dir exists so setup-dotnet's cache post-step doesn't error
+      - name: Ensure NuGet cache directory exists
+        run: mkdir -p "$HOME/.nuget/packages"
+
+      - name: Restore (locked)
+        run: dotnet restore --nologo --locked-mode --configfile ./nuget.ci.config
+
+      - name: Pack (all packable projects in solution)
+        run: |
+          dotnet pack ./PavlovRcon.slnx \
+            -c Release \
+            -p:ContinuousIntegrationBuild=true \
+            -p:PackageVersion='${{ steps.get_version.outputs.version }}' \
+            --no-restore \
+            -o ./artifacts
+
+      - name: List artifacts
+        run: ls -la ./artifacts
+
+      # Use an API key to silence GitHub Packages warnings
+      - name: Push packages to GitHub Packages
+        env:
+          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          shopt -s nullglob
+          for pkg in ./artifacts/*.nupkg; do
+            dotnet nuget push "$pkg" \
+              --source "github-${{ github.repository_owner }}" \
+              --configfile ./nuget.ci.config \
+              --api-key "$NUGET_AUTH_TOKEN" \
+              --skip-duplicate
+          done
+          for sym in ./artifacts/*.snupkg; do
+            dotnet nuget push "$sym" \
+              --source "github-${{ github.repository_owner }}" \
+              --configfile ./nuget.ci.config \
+              --api-key "$NUGET_AUTH_TOKEN" \
+              --skip-duplicate
+          done
