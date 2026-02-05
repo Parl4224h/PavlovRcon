@@ -1,20 +1,22 @@
 ﻿namespace PavlovRcon.GameData;
 
 /// <summary>
-/// Items for the Hide game mode
+///     Items for the Hide game mode
 /// </summary>
 public enum HideItem
 {
     /// <summary>
-    /// Adrenaline syringe
+    ///     Adrenaline syringe
     /// </summary>
     [RconId("adrenaline")] Adrenaline,
+
     /// <summary>
-    /// Trip Alarm
+    ///     Trip Alarm
     /// </summary>
     [RconId("tripalarm")] TripAlarm,
+
     /// <summary>
-    /// Tranquilizer Gun
+    ///     Tranquilizer Gun
     /// </summary>
     [RconId("tranqgun")] TranquilizerGun
 }

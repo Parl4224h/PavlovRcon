@@ -10,39 +10,41 @@ using PavlovRcon.Exceptions;
 namespace PavlovRcon.RconClient;
 
 /// <summary>
-/// Implementation of the RCON client.
+///     Implementation of the RCON client.
 /// </summary>
 public class RconClient : IRconClient
 {
+    private readonly bool _autoConnect;
+    private readonly TimeSpan _commandTimeout;
+    private readonly SemaphoreSlim _connectLock = new(1, 1);
+
+    private readonly Encoding _encoding = new UTF8Encoding(false);
+
     // Config variables
     private readonly string _host;
-    private readonly int _port;
-    private readonly string _password;
-    private readonly bool _autoConnect;
-    private readonly TimeSpan _idleDisconnectTimeout;
     private readonly TimeSpan _idleCheckInterval;
-    private readonly TimeSpan _commandTimeout;
-
-    // State variables
-    private TcpClient? _tcp;
-    private NetworkStream? _stream;
-
-    private readonly StringBuilder _textBuffer = new();
-    private readonly Encoding _encoding = new UTF8Encoding(encoderShouldEmitUTF8Identifier: false);
+    private readonly TimeSpan _idleDisconnectTimeout;
+    private readonly string _password;
+    private readonly int _port;
     private readonly byte[] _readBuffer = ArrayPool<byte>.Shared.Rent(8192);
 
     private readonly SemaphoreSlim _sendLock = new(1, 1);
-    private readonly SemaphoreSlim _connectLock = new(1, 1);
 
-
-    // Idle Tracking
-    private long _lastRequestTick;
+    private readonly StringBuilder _textBuffer = new();
     private CancellationTokenSource? _idleMonitorCts;
     private Task? _idleMonitorTask;
 
 
+    // Idle Tracking
+    private long _lastRequestTick;
+    private NetworkStream? _stream;
+
+    // State variables
+    private TcpClient? _tcp;
+
+
     /// <summary>
-    /// Creates a new RconClient.
+    ///     Creates a new RconClient.
     /// </summary>
     /// <param name="connectionInfo">The connection info for the RCON server</param>
     /// <param name="options">The options for the RCON client</param>
@@ -114,7 +116,10 @@ public class RconClient : IRconClient
 
 
     /// <inheritdoc />
-    /// <exception cref="NotConnectedException">Thrown when the client is not connected to the server and AutoConnect is disabled</exception>
+    /// <exception cref="NotConnectedException">
+    ///     Thrown when the client is not connected to the server and AutoConnect is
+    ///     disabled
+    /// </exception>
     /// <exception cref="InvalidResponseException">Thrown when the server sends a response that fails to be parsed</exception>
     /// <exception cref="TimeoutException">Thrown when the server does not respond to the command within the specified timeout</exception>
     public async Task<TResponse> SendCommandAsync<TResponse>(IRconCommand<TResponse> rconCommand,
@@ -123,14 +128,10 @@ public class RconClient : IRconClient
         if (_stream is null)
         {
             if (_autoConnect)
-            {
                 await ConnectAsync(ct).ConfigureAwait(false);
-            }
             else
-            {
                 throw new NotConnectedException(
                     "Not connected. Call ConnectAsync() first, or set AutoConnect to true in the constructor.");
-            }
         }
 
         await _sendLock.WaitAsync(ct).ConfigureAwait(false);
@@ -151,10 +152,7 @@ public class RconClient : IRconClient
                 PropertyNameCaseInsensitive = true
             });
 
-            if (result is null)
-            {
-                throw new InvalidResponseException($"Response was not valid JSON: {json}");
-            }
+            if (result is null) throw new InvalidResponseException($"Response was not valid JSON: {json}");
 
             TouchActivity();
             return result;
@@ -222,7 +220,6 @@ public class RconClient : IRconClient
             if (acquiredSend) _sendLock.Release();
 
             if (monitorTask is not null)
-            {
                 try
                 {
                     await monitorTask.ConfigureAwait(false);
@@ -234,11 +231,13 @@ public class RconClient : IRconClient
                 {
                     // ignored
                 }
-            }
         }
     }
 
-    private void TouchActivity() => Interlocked.Exchange(ref _lastRequestTick, Environment.TickCount64);
+    private void TouchActivity()
+    {
+        Interlocked.Exchange(ref _lastRequestTick, Environment.TickCount64);
+    }
 
     private void StartIdleMonitor()
     {
@@ -353,10 +352,10 @@ public class RconClient : IRconClient
     {
         // Reads bytes until a complete top-level JSON object is collected, using brace balancing.
         var sb = new StringBuilder();
-        bool started = false;
-        bool inString = false;
-        bool escape = false;
-        int depth = 0;
+        var started = false;
+        var inString = false;
+        var escape = false;
+        var depth = 0;
 
         while (true)
         {
@@ -376,7 +375,7 @@ public class RconClient : IRconClient
             }
 
             // Need more data
-            int n = await _stream!.ReadAsync(_readBuffer, 0, _readBuffer.Length, ct).ConfigureAwait(false);
+            var n = await _stream!.ReadAsync(_readBuffer, 0, _readBuffer.Length, ct).ConfigureAwait(false);
             if (n <= 0) throw new IOException("Disconnected.");
             var text = _encoding.GetString(_readBuffer, 0, n);
             ConsumeChunk(text);
@@ -442,7 +441,7 @@ public class RconClient : IRconClient
 
     private async Task ReadMoreTextAsync(CancellationToken ct)
     {
-        int n = await _stream!.ReadAsync(_readBuffer, 0, _readBuffer.Length, ct).ConfigureAwait(false);
+        var n = await _stream!.ReadAsync(_readBuffer, 0, _readBuffer.Length, ct).ConfigureAwait(false);
         if (n <= 0) throw new IOException("Connection closed");
         _textBuffer.Append(_encoding.GetString(_readBuffer, 0, n));
     }

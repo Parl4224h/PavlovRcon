@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 namespace PavlovRcon.GameData;
 
 /// <summary>
-/// JSON converter for enums with the RconId attribute.
+///     JSON converter for enums with the RconId attribute.
 /// </summary>
 /// <typeparam name="TEnum">The enum type to convert.</typeparam>
 public sealed class RconIdEnumJsonConverter<TEnum> : JsonConverter<TEnum>
@@ -16,8 +16,8 @@ public sealed class RconIdEnumJsonConverter<TEnum> : JsonConverter<TEnum>
 
     static RconIdEnumJsonConverter()
     {
-        FromRconId = new(StringComparer.OrdinalIgnoreCase);
-        ToRconId = new();
+        FromRconId = new Dictionary<string, TEnum>(StringComparer.OrdinalIgnoreCase);
+        ToRconId = new Dictionary<TEnum, string>();
 
         foreach (var field in typeof(TEnum).GetFields(BindingFlags.Public | BindingFlags.Static))
         {

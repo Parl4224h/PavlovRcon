@@ -1,24 +1,27 @@
 ﻿namespace PavlovRcon.GameData;
 
 /// <summary>
-/// Rocket Launchers.
+///     Rocket Launchers.
 /// </summary>
 public enum RocketLauncher
 {
     /// <summary>
-    /// RPG-7
+    ///     RPG-7
     /// </summary>
     [RconId("rl_rpg")] RPG7,
+
     /// <summary>
-    /// Panzerschreck
+    ///     Panzerschreck
     /// </summary>
     [RconId("rl_panzer")] Panzerschreck,
+
     /// <summary>
-    /// M1 Bazooka
+    ///     M1 Bazooka
     /// </summary>
     [RconId("rl_m1ma1")] M1Bazooka,
+
     /// <summary>
-    /// PIAT
+    ///     PIAT
     /// </summary>
     [RconId("rl_piat")] PIAT
 }

@@ -1,24 +1,27 @@
 ﻿namespace PavlovRcon.GameData;
 
 /// <summary>
-/// Items for the Push game mode
+///     Items for the Push game mode
 /// </summary>
 public enum PushItem
 {
     /// <summary>
-    /// Push bomb
+    ///     Push bomb
     /// </summary>
     [RconId("pushbomb")] Bomb,
+
     /// <summary>
-    /// Anti-tank mine
+    ///     Anti-tank mine
     /// </summary>
     [RconId("antitankmine")] AntiTankMine,
+
     /// <summary>
-    /// Anti-personnel mine
+    ///     Anti-personnel mine
     /// </summary>
     [RconId("antipersonnelmine")] AntiPersonnelMine,
+
     /// <summary>
-    /// Ammo crate
+    ///     Ammo crate
     /// </summary>
     [RconId("ammocrate")] AmmoCrate
 }

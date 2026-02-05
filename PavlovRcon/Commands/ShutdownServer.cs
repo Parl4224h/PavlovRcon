@@ -3,12 +3,14 @@
 namespace PavlovRcon.Commands;
 
 /// <summary>
-/// ShutdownServer command, shuts down the server.
+///     ShutdownServer command, shuts down the server.
 /// </summary>
 public class ShutdownServer : RconCommand<RconOkResponse>
 {
     /// <summary>
-    /// Creates a new ShutdownServer command.
+    ///     Creates a new ShutdownServer command.
     /// </summary>
-    public ShutdownServer() : base("ShutdownServer") { }
+    public ShutdownServer() : base("ShutdownServer")
+    {
+    }
 }

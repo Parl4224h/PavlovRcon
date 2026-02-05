@@ -1,40 +1,47 @@
 ﻿namespace PavlovRcon.GameData;
 
 /// <summary>
-/// Medical items.
+///     Medical items.
 /// </summary>
 public enum MedicalItem
 {
     /// <summary>
-    /// Painkiller bottle
+    ///     Painkiller bottle
     /// </summary>
     [RconId("painkillers")] Painkillers,
+
     /// <summary>
-    /// WW2 healing syringe
+    ///     WW2 healing syringe
     /// </summary>
     [RconId("ww2syringe")] WW2Syringe,
+
     /// <summary>
-    /// Medical Kit
+    ///     Medical Kit
     /// </summary>
     [RconId("medkit")] MedKit,
+
     /// <summary>
-    /// Bandage
+    ///     Bandage
     /// </summary>
     [RconId("bandage")] Bandage,
+
     /// <summary>
-    /// WW2 Medical Kit
+    ///     WW2 Medical Kit
     /// </summary>
     [RconId("ww2medkit")] WW2MedKit,
+
     /// <summary>
-    /// Healing syringe
+    ///     Healing syringe
     /// </summary>
     [RconId("syringe")] Syringe,
+
     /// <summary>
-    /// WW2 Painkiller bottle
+    ///     WW2 Painkiller bottle
     /// </summary>
     [RconId("ww2painkillers")] WW2Painkillers,
+
     /// <summary>
-    /// WW2 Bandage
+    ///     WW2 Bandage
     /// </summary>
     [RconId("ww2bandage")] WW2Bandage
 }

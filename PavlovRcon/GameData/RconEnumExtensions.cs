@@ -1,17 +1,17 @@
-﻿namespace PavlovRcon.GameData;
-
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Reflection;
 
+namespace PavlovRcon.GameData;
+
 /// <summary>
-/// Extension method for getting the RCON ID of an enum value.
+///     Extension method for getting the RCON ID of an enum value.
 /// </summary>
 public static class RconEnumExtensions
 {
     private static readonly ConcurrentDictionary<Enum, string> Cache = new();
 
     /// <summary>
-    /// Gets the RCON ID of an enum value.
+    ///     Gets the RCON ID of an enum value.
     /// </summary>
     /// <param name="value">The enum value to get the RCON ID for</param>
     /// <returns>The RCON ID of the enum value</returns>

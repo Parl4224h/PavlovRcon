@@ -19,7 +19,7 @@ public abstract class RconResponseBase
     /// <remarks>
     ///     This does not guarantee the server updated its state. The field that is the name of the command should be relied
     ///     upon for verifying that the command successfully updated the server state. For commands that have a second state
-    ///     for success the additional property <see cref="WasSuccessful"/> is pointed at that value instead of the general
+    ///     for success the additional property <see cref="WasSuccessful" /> is pointed at that value instead of the general
     ///     Success flag.
     /// </remarks>
     [JsonPropertyName("Successful")]

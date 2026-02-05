@@ -1,91 +1,77 @@
 ﻿namespace PavlovRcon.GameData;
 
 /// <summary>
-/// Roles for the TTT game mode
+///     Roles for the TTT game mode
 /// </summary>
 public enum TttRole
 {
     /// <summary>
-    /// The detective role.
+    ///     The detective role.
     /// </summary>
-    [RconId("Detective")]
-    Detective,
+    [RconId("Detective")] Detective,
 
     /// <summary>
-    /// The sheriff role.
+    ///     The sheriff role.
     /// </summary>
-    [RconId("Sheriff")]
-    Sheriff,
+    [RconId("Sheriff")] Sheriff,
 
     /// <summary>
-    /// The tank role.
+    ///     The tank role.
     /// </summary>
-    [RconId("Tank")]
-    Tank,
+    [RconId("Tank")] Tank,
 
     /// <summary>
-    /// The innocent role.
+    ///     The innocent role.
     /// </summary>
-    [RconId("Innocent")]
-    Innocent,
+    [RconId("Innocent")] Innocent,
 
     /// <summary>
-    /// The mercenary role.
+    ///     The mercenary role.
     /// </summary>
-    [RconId("Mercenary")]
-    Mercenary,
+    [RconId("Mercenary")] Mercenary,
 
     /// <summary>
-    /// The survivalist role.
+    ///     The survivalist role.
     /// </summary>
-    [RconId("Survivalist")]
-    Survivalist,
+    [RconId("Survivalist")] Survivalist,
 
     /// <summary>
-    /// The glitch role.
+    ///     The glitch role.
     /// </summary>
-    [RconId("Glitch")]
-    Glitch,
+    [RconId("Glitch")] Glitch,
 
     /// <summary>
-    /// The jester role.
+    ///     The jester role.
     /// </summary>
-    [RconId("Jester")]
-    Jester,
+    [RconId("Jester")] Jester,
 
     /// <summary>
-    /// The psychopath role.
+    ///     The psychopath role.
     /// </summary>
-    [RconId("Psychopath")]
-    Psychopath,
+    [RconId("Psychopath")] Psychopath,
 
     /// <summary>
-    /// The lone wolf role.
+    ///     The lone wolf role.
     /// </summary>
-    [RconId("Lone Wolf")]
-    LoneWolf,
+    [RconId("Lone Wolf")] LoneWolf,
 
     /// <summary>
-    /// The traitor role.
+    ///     The traitor role.
     /// </summary>
-    [RconId("Traitor")]
-    Traitor,
+    [RconId("Traitor")] Traitor,
 
     /// <summary>
-    /// The hypnotist role.
+    ///     The hypnotist role.
     /// </summary>
-    [RconId("Hypnotist")]
-    Hypnotist,
+    [RconId("Hypnotist")] Hypnotist,
 
     /// <summary>
-    /// The soulmate role.
+    ///     The soulmate role.
     /// </summary>
-    [RconId("Soulmate")]
-    Soulmate,
+    [RconId("Soulmate")] Soulmate,
 
     /// <summary>
-    /// The zombie role.
+    ///     The zombie role.
     /// </summary>
-    [RconId("Zombie")]
-    Zombie,
+    [RconId("Zombie")] Zombie
 }

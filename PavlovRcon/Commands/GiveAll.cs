@@ -4,12 +4,12 @@ using PavlovRcon.Responses;
 namespace PavlovRcon.Commands;
 
 /// <summary>
-/// GiveAll command gives all players on a team the specified ammo.
+///     GiveAll command gives all players on a team the specified ammo.
 /// </summary>
 public class GiveAll : RconCommand<GiveAllResponse>
 {
     /// <summary>
-    /// Creates a new GiveAll command. Allows for custom items.
+    ///     Creates a new GiveAll command. Allows for custom items.
     /// </summary>
     /// <param name="teamId">The team ID to give ammo to.</param>
     /// <param name="item">The item to give.</param>
@@ -18,9 +18,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(item);
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give ammo to.</param>
     /// <param name="ammo">The ammo type to give.</param>
@@ -29,9 +29,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(ammo.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give an attachment to.</param>
     /// <param name="attachment">The attachment to give.</param>
@@ -40,9 +40,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(attachment.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a grenade to.</param>
     /// <param name="grenade">The grenade to give.</param>
@@ -51,9 +51,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(grenade.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a heavy to.</param>
     /// <param name="heavy">The heavy to give.</param>
@@ -62,9 +62,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(heavy.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a hide item to.</param>
     /// <param name="item">The hide item to give.</param>
@@ -73,9 +73,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(item.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a medical item to.</param>
     /// <param name="medicalItem">The medical item to give.</param>
@@ -86,7 +86,7 @@ public class GiveAll : RconCommand<GiveAllResponse>
     }
 
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a misc item to.</param>
     /// <param name="item">The misc item to give.</param>
@@ -95,9 +95,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(item.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a pistol to.</param>
     /// <param name="pistol">The pistol to give.</param>
@@ -106,9 +106,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(pistol.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a push item to.</param>
     /// <param name="item">The push item to give.</param>
@@ -117,9 +117,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(item.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a rifle to.</param>
     /// <param name="rifle">The rifle to give.</param>
@@ -130,7 +130,7 @@ public class GiveAll : RconCommand<GiveAllResponse>
     }
 
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a rocket launcher to.</param>
     /// <param name="rocketLauncher">The rocket launcher to give.</param>
@@ -139,9 +139,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(rocketLauncher.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a smg to.</param>
     /// <param name="smg">The smg to give.</param>
@@ -150,9 +150,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(smg.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a sniper to.</param>
     /// <param name="sniper">The sniper to give.</param>
@@ -161,9 +161,9 @@ public class GiveAll : RconCommand<GiveAllResponse>
         Add(teamId);
         Add(sniper.ToRconId());
     }
-    
+
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a ttt item to.</param>
     /// <param name="item">The ttt item to give.</param>
@@ -174,7 +174,7 @@ public class GiveAll : RconCommand<GiveAllResponse>
     }
 
     /// <summary>
-    /// Creates a new GiveAll command.
+    ///     Creates a new GiveAll command.
     /// </summary>
     /// <param name="teamId">The team ID to give a vehicle to.</param>
     /// <param name="vehicle">The vehicle to give.</param>

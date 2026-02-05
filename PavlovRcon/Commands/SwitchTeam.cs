@@ -3,12 +3,12 @@
 namespace PavlovRcon.Commands;
 
 /// <summary>
-/// SwitchTeam command, switches a player's team.
+///     SwitchTeam command, switches a player's team.
 /// </summary>
 public class SwitchTeam : RconCommand<SwitchTeamResponse>
 {
     /// <summary>
-    /// Creates a new SwitchTeam command.
+    ///     Creates a new SwitchTeam command.
     /// </summary>
     /// <param name="uniqueId">The unique identifier of the player to switch teams.</param>
     /// <param name="targetTeamId">The unique identifier of the target team.</param>

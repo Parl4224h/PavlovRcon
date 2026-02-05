@@ -3,12 +3,14 @@
 namespace PavlovRcon.Commands;
 
 /// <summary>
-/// ResetSnd command, resets the game on the Search and Destroy game mode.
+///     ResetSnd command, resets the game on the Search and Destroy game mode.
 /// </summary>
 public class ResetSnd : RconCommand<ResetSndResponse>
 {
     /// <summary>
-    /// Creates a new ResetSnd command.
+    ///     Creates a new ResetSnd command.
     /// </summary>
-    public ResetSnd() : base("ResetSND") { }
+    public ResetSnd() : base("ResetSND")
+    {
+    }
 }

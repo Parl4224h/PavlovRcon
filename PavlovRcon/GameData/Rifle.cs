@@ -1,68 +1,82 @@
 ﻿namespace PavlovRcon.GameData;
 
 /// <summary>
-/// Rifles.
+///     Rifles.
 /// </summary>
 public enum Rifle
 {
     /// <summary>
-    /// Famas
+    ///     Famas
     /// </summary>
     [RconId("vanas")] Famas,
+
     /// <summary>
-    /// Steyr AUG
+    ///     Steyr AUG
     /// </summary>
     [RconId("aug")] AUG,
+
     /// <summary>
-    /// M4
+    ///     M4
     /// </summary>
     [RconId("ar")] M4,
+
     /// <summary>
-    /// AK-47
+    ///     AK-47
     /// </summary>
     [RconId("ak47")] AK47,
+
     /// <summary>
-    /// AK-12
+    ///     AK-12
     /// </summary>
     [RconId("ak12")] AK12,
+
     /// <summary>
-    /// G-43
+    ///     G-43
     /// </summary>
     [RconId("g43")] G43,
+
     /// <summary>
-    /// M1 Garand
+    ///     M1 Garand
     /// </summary>
     [RconId("m1garand")] Garand,
+
     /// <summary>
-    /// SVT-40
+    ///     SVT-40
     /// </summary>
     [RconId("svt40")] SVT40,
+
     /// <summary>
-    /// Browning Automatic Rifle
+    ///     Browning Automatic Rifle
     /// </summary>
     [RconId("bar")] BAR,
+
     /// <summary>
-    /// Bren
+    ///     Bren
     /// </summary>
     [RconId("bren")] Bren,
+
     /// <summary>
-    /// StG-44
+    ///     StG-44
     /// </summary>
     [RconId("stg44")] StG44,
+
     /// <summary>
-    /// DP-27
+    ///     DP-27
     /// </summary>
     [RconId("db27")] DB27,
+
     /// <summary>
-    /// Galil
+    ///     Galil
     /// </summary>
     [RconId("Galil")] Galil,
+
     /// <summary>
-    /// M16
+    ///     M16
     /// </summary>
     [RconId("m16")] M16,
+
     /// <summary>
-    /// SKS
+    ///     SKS
     /// </summary>
     [RconId("sks")] SKS
 }

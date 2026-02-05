@@ -1,64 +1,77 @@
 ﻿namespace PavlovRcon.GameData;
 
 /// <summary>
-/// SMG
+///     SMG
 /// </summary>
 public enum Smg
 {
     /// <summary>
-    /// Bizon
+    ///     Bizon
     /// </summary>
     [RconId("ak")] Bizon,
+
     /// <summary>
-    /// UMP-45
+    ///     UMP-45
     /// </summary>
     [RconId("smg")] UMP45,
+
     /// <summary>
-    /// MP-5
+    ///     MP-5
     /// </summary>
     [RconId("mp5")] MP5,
+
     /// <summary>
-    /// P90
+    ///     P90
     /// </summary>
     [RconId("p90")] P90,
+
     /// <summary>
-    /// Uzi
+    ///     Uzi
     /// </summary>
     [RconId("uzi")] Uzi,
+
     /// <summary>
-    /// MP-40
+    ///     MP-40
     /// </summary>
     [RconId("mp40")] MP40,
+
     /// <summary>
-    /// PPSh-41
+    ///     PPSh-41
     /// </summary>
     [RconId("ppsh")] PPSh,
+
     /// <summary>
-    /// Sten
+    ///     Sten
     /// </summary>
     [RconId("sten")] Sten,
+
     /// <summary>
-    /// Thompson
+    ///     Thompson
     /// </summary>
     [RconId("thompson")] Thompson,
+
     /// <summary>
-    /// Kriss Vector
+    ///     Kriss Vector
     /// </summary>
     [RconId("kross")] KrissVector,
+
     /// <summary>
-    /// VSS Vintorez
+    ///     VSS Vintorez
     /// </summary>
     [RconId("vzz")] VSS,
+
     /// <summary>
-    /// AR9
+    ///     AR9
     /// </summary>
     [RconId("ar9")] AR9,
+
     /// <summary>
-    /// Draco
+    ///     Draco
     /// </summary>
     [RconId("akshorty")] Draco,
+
     /// <summary>
-    /// Skorpion
+    ///     Skorpion
     /// </summary>
     [RconId("skorpion")] Skorpion
 }

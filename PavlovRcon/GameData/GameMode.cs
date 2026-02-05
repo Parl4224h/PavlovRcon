@@ -3,100 +3,83 @@
 namespace PavlovRcon.GameData;
 
 /// <summary>
-/// Game modes supported by the game.
+///     Game modes supported by the game.
 /// </summary>
 [JsonConverter(typeof(RconIdEnumJsonConverter<GameMode>))]
 public enum GameMode
 {
     /// <summary>
-    /// The deathmatch game mode.
+    ///     The deathmatch game mode.
     /// </summary>
-    [RconId("DM")]
-    DeathMatch,
+    [RconId("DM")] DeathMatch,
 
     /// <summary>
-    /// The gun game mode.
+    ///     The gun game mode.
     /// </summary>
-    [RconId("GUN")]
-    GunGame,
+    [RconId("GUN")] GunGame,
 
     /// <summary>
-    /// The hidden infection game mode.
+    ///     The hidden infection game mode.
     /// </summary>
-    [RconId("INFECTION")]
-    HiddenInfection,
+    [RconId("INFECTION")] HiddenInfection,
 
     /// <summary>
-    /// The king of the hill game mode.
+    ///     The king of the hill game mode.
     /// </summary>
-    [RconId("KOTH")]
-    KingOfTheHill,
+    [RconId("KOTH")] KingOfTheHill,
 
     /// <summary>
-    /// The one in the chamber game mode.
+    ///     The one in the chamber game mode.
     /// </summary>
-    [RconId("OITC")]
-    OneInTheChamber,
+    [RconId("OITC")] OneInTheChamber,
 
     /// <summary>
-    /// The prop hunt game mode.
+    ///     The prop hunt game mode.
     /// </summary>
-    [RconId("PH")]
-    PropHunt,
+    [RconId("PH")] PropHunt,
 
     /// <summary>
-    /// The push game mode.
+    ///     The push game mode.
     /// </summary>
-    [RconId("PUSH")]
-    Push,
+    [RconId("PUSH")] Push,
 
     /// <summary>
-    /// The search and destroy game mode.
+    ///     The search and destroy game mode.
     /// </summary>
-    [RconId("SND")]
-    SearchAndDestroy,
+    [RconId("SND")] SearchAndDestroy,
 
     /// <summary>
-    /// The team deathmatch game mode.
+    ///     The team deathmatch game mode.
     /// </summary>
-    [RconId("TDM")]
-    TeamDeathMatch,
+    [RconId("TDM")] TeamDeathMatch,
 
     /// <summary>
-    /// The hidden game mode.
+    ///     The hidden game mode.
     /// </summary>
-    [RconId("HIDE")]
-    TheHidden,
+    [RconId("HIDE")] TheHidden,
 
     /// <summary>
-    /// The TTT game mode.
+    ///     The TTT game mode.
     /// </summary>
-    [RconId("TTT")]
-    TroubleInTerroristTown,
+    [RconId("TTT")] TroubleInTerroristTown,
 
     /// <summary>
-    /// The TTT classic game mode.
+    ///     The TTT classic game mode.
     /// </summary>
-    [RconId("TTTclassic")]
-    TroubleInTerroristTownClassic,
+    [RconId("TTTclassic")] TroubleInTerroristTownClassic,
 
     /// <summary>
-    /// The WW2 gun game mode.
+    ///     The WW2 gun game mode.
     /// </summary>
-    [RconId("WW2GUN")]
-    WW2GunGame,
+    [RconId("WW2GUN")] WW2GunGame,
 
     /// <summary>
-    /// The WW2 team deathmatch game mode.
+    ///     The WW2 team deathmatch game mode.
     /// </summary>
-    [RconId("WW2TDM")]
-    WW2TeamDeathMatch,
+    [RconId("WW2TDM")] WW2TeamDeathMatch,
 
     /// <summary>
-    /// The zombie wave survival game mode.
+    ///     The zombie wave survival game mode.
     /// </summary>
-    [RconId("ZWV")]
-    ZombieWaveSurvival,
+    [RconId("ZWV")] ZombieWaveSurvival
 }
-
-
