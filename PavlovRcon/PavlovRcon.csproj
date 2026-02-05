@@ -7,6 +7,7 @@
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <PackageId>PavlovRcon</PackageId>
         <Authors>Parl4224h</Authors>
+        <RestorePackagesWithLockFile>true</RestorePackagesWithLockFile>
     </PropertyGroup>
 
 </Project>
