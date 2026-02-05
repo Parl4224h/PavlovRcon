@@ -82,13 +82,14 @@ public class RconClient : IRconClient
             TouchActivity();
 
             await ReadUntilSubstringAsync("Password: ", ct).ConfigureAwait(false);
+            _textBuffer.Clear();
             await SendRawAsync(_password + "\n", ct).ConfigureAwait(false);
 
             var authLine = await ReadLineAsync(ct).ConfigureAwait(false);
             if (!authLine.StartsWith("Authenticated=", StringComparison.OrdinalIgnoreCase) ||
                 authLine.Contains("Authenticated=0", StringComparison.OrdinalIgnoreCase))
             {
-                await DisconnectCoreAsync(ct).ConfigureAwait(false); // <- use core
+                await DisconnectCoreAsync(ct).ConfigureAwait(false);
                 throw new InvalidPasswordException("Invalid password.");
             }
 
