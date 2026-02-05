@@ -2,8 +2,6 @@ using System.Text.Json.Serialization;
 
 namespace PavlovRcon.Responses;
 
-// TODO: verify fields that should be numeric actually return a string
-
 /// <summary>
 ///     Data that is retrieved when inspecting a player.
 /// </summary>

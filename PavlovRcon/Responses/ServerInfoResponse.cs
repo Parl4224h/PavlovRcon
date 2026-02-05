@@ -3,8 +3,6 @@ using PavlovRcon.GameData;
 
 namespace PavlovRcon.Responses;
 
-// TODO: verify fields that should be numeric actually return a string
-
 /// <summary>
 ///     ServerInfo response.
 /// </summary>
@@ -55,13 +53,13 @@ public class ServerInfoResponse : RconResponseBase
         ///     Team 0's score.
         /// </summary>
         [JsonPropertyName("Team0Score")]
-        public string Team0Score { get; set; } = null!; // TODO: verify this exists if Teams is false
+        public string Team0Score { get; set; } = null!;
 
         /// <summary>
         ///     Team 1's score.
         /// </summary>
         [JsonPropertyName("Team1Score")]
-        public string Team1Score { get; set; } = null!; // TODO: verify this exists if Teams is false
+        public string Team1Score { get; set; } = null!;
 
         /// <summary>
         ///     The current round number.
