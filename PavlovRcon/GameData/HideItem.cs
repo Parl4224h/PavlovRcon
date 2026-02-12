@@ -8,15 +8,15 @@ public enum HideItem
     /// <summary>
     ///     Adrenaline syringe
     /// </summary>
-    [RconId("adrenaline")] Adrenaline,
+    [RconId("adrenaline")] Adrenaline = 0,
 
     /// <summary>
     ///     Trip Alarm
     /// </summary>
-    [RconId("tripalarm")] TripAlarm,
+    [RconId("tripalarm")] TripAlarm = 1,
 
     /// <summary>
     ///     Tranquilizer Gun
     /// </summary>
-    [RconId("tranqgun")] TranquilizerGun
+    [RconId("tranqgun")] TranquilizerGun = 2
 }

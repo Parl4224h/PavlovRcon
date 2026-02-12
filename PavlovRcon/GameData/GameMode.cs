@@ -11,75 +11,75 @@ public enum GameMode
     /// <summary>
     ///     The deathmatch game mode.
     /// </summary>
-    [RconId("DM")] DeathMatch,
+    [RconId("DM")] DeathMatch = 0,
 
     /// <summary>
     ///     The gun game mode.
     /// </summary>
-    [RconId("GUN")] GunGame,
+    [RconId("GUN")] GunGame = 1,
 
     /// <summary>
     ///     The hidden infection game mode.
     /// </summary>
-    [RconId("INFECTION")] HiddenInfection,
+    [RconId("INFECTION")] HiddenInfection = 2,
 
     /// <summary>
     ///     The king of the hill game mode.
     /// </summary>
-    [RconId("KOTH")] KingOfTheHill,
+    [RconId("KOTH")] KingOfTheHill = 3,
 
     /// <summary>
     ///     The one in the chamber game mode.
     /// </summary>
-    [RconId("OITC")] OneInTheChamber,
+    [RconId("OITC")] OneInTheChamber = 4,
 
     /// <summary>
     ///     The prop hunt game mode.
     /// </summary>
-    [RconId("PH")] PropHunt,
+    [RconId("PH")] PropHunt = 5,
 
     /// <summary>
     ///     The push game mode.
     /// </summary>
-    [RconId("PUSH")] Push,
+    [RconId("PUSH")] Push = 6,
 
     /// <summary>
     ///     The search and destroy game mode.
     /// </summary>
-    [RconId("SND")] SearchAndDestroy,
+    [RconId("SND")] SearchAndDestroy = 7,
 
     /// <summary>
     ///     The team deathmatch game mode.
     /// </summary>
-    [RconId("TDM")] TeamDeathMatch,
+    [RconId("TDM")] TeamDeathMatch = 8,
 
     /// <summary>
     ///     The hidden game mode.
     /// </summary>
-    [RconId("HIDE")] TheHidden,
+    [RconId("HIDE")] TheHidden = 9,
 
     /// <summary>
     ///     The TTT game mode.
     /// </summary>
-    [RconId("TTT")] TroubleInTerroristTown,
+    [RconId("TTT")] TroubleInTerroristTown = 10,
 
     /// <summary>
     ///     The TTT classic game mode.
     /// </summary>
-    [RconId("TTTclassic")] TroubleInTerroristTownClassic,
+    [RconId("TTTclassic")] TroubleInTerroristTownClassic = 11,
 
     /// <summary>
     ///     The WW2 gun game mode.
     /// </summary>
-    [RconId("WW2GUN")] WW2GunGame,
+    [RconId("WW2GUN")] WW2GunGame = 12,
 
     /// <summary>
     ///     The WW2 team deathmatch game mode.
     /// </summary>
-    [RconId("WW2TDM")] WW2TeamDeathMatch,
+    [RconId("WW2TDM")] WW2TeamDeathMatch = 13,
 
     /// <summary>
     ///     The zombie wave survival game mode.
     /// </summary>
-    [RconId("ZWV")] ZombieWaveSurvival
+    [RconId("ZWV")] ZombieWaveSurvival = 14
 }
