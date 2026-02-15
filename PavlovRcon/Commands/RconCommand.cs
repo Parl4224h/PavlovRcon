@@ -15,7 +15,7 @@ public abstract class RconCommand<TResponse>(string command)
     /// <exception cref="InvalidOperationException">Thrown if the number of arguments does not match the expected number</exception>
     public string BuildCommand()
     {
-        return string.Join(" ", _command, _arguments);
+        return string.Join(" ", _command, string.Join(' ', _arguments));
     }
 
     /// <summary>
