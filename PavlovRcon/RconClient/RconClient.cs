@@ -14,33 +14,29 @@ namespace PavlovRcon.RconClient;
 /// </summary>
 public class RconClient : IRconClient
 {
-    private readonly bool _autoConnect;
-    private readonly TimeSpan _commandTimeout;
-    private readonly SemaphoreSlim _connectLock = new(1, 1);
-
-    private readonly Encoding _encoding = new UTF8Encoding(false);
-
     // Config variables
     private readonly string _host;
     private readonly TimeSpan _idleCheckInterval;
     private readonly TimeSpan _idleDisconnectTimeout;
     private readonly string _password;
     private readonly int _port;
-    private readonly byte[] _readBuffer = ArrayPool<byte>.Shared.Rent(8192);
-
-    private readonly SemaphoreSlim _sendLock = new(1, 1);
-
-    private readonly StringBuilder _textBuffer = new();
-    private CancellationTokenSource? _idleMonitorCts;
-    private Task? _idleMonitorTask;
-
+    private readonly bool _autoConnect;
+    private readonly TimeSpan _commandTimeout;
+    private readonly Encoding _encoding = new UTF8Encoding(false);
 
     // Idle Tracking
     private long _lastRequestTick;
     private NetworkStream? _stream;
+    private CancellationTokenSource? _idleMonitorCts;
+    private Task? _idleMonitorTask;
 
     // State variables
     private TcpClient? _tcp;
+    private readonly byte[] _readBuffer = ArrayPool<byte>.Shared.Rent(8192);
+    private readonly SemaphoreSlim _sendLock = new(1, 1);
+    private readonly SemaphoreSlim _connectLock = new(1, 1);
+    private readonly StringBuilder _textBuffer = new();
+    private bool _isAuthenticated;
 
 
     /// <summary>
@@ -68,37 +64,7 @@ public class RconClient : IRconClient
     /// <exception cref="InvalidPasswordException">Thrown when the server rejects the password</exception>
     public async Task ConnectAsync(CancellationToken ct = default)
     {
-        if (_stream is not null) return;
-
-        await _connectLock.WaitAsync(ct).ConfigureAwait(false);
-        try
-        {
-            if (_stream is not null) return;
-
-            _tcp = new TcpClient();
-            await _tcp.ConnectAsync(_host, _port, ct).ConfigureAwait(false);
-            _stream = _tcp.GetStream();
-
-            TouchActivity();
-
-            await ReadUntilSubstringAsync("Password: ", ct).ConfigureAwait(false);
-            _textBuffer.Clear();
-            await SendRawAsync(_password + "\n", ct).ConfigureAwait(false);
-
-            var authLine = await ReadLineAsync(ct).ConfigureAwait(false);
-            if (!authLine.StartsWith("Authenticated=", StringComparison.OrdinalIgnoreCase) ||
-                authLine.Contains("Authenticated=0", StringComparison.OrdinalIgnoreCase))
-            {
-                await DisconnectCoreAsync(ct).ConfigureAwait(false);
-                throw new InvalidPasswordException("Invalid password.");
-            }
-
-            StartIdleMonitor();
-        }
-        finally
-        {
-            _connectLock.Release();
-        }
+        await EnsureConnectedAsync(ct).ConfigureAwait(false);
     }
 
     /// <inheritdoc />
@@ -126,14 +92,11 @@ public class RconClient : IRconClient
     public async Task<TResponse> SendCommandAsync<TResponse>(IRconCommand<TResponse> rconCommand,
         CancellationToken ct = default)
     {
-        if (_stream is null)
-        {
-            if (_autoConnect)
-                await ConnectAsync(ct).ConfigureAwait(false);
-            else
-                throw new NotConnectedException(
-                    "Not connected. Call ConnectAsync() first, or set AutoConnect to true in the constructor.");
-        }
+        if (_autoConnect)
+            await EnsureConnectedAsync(ct).ConfigureAwait(false);
+        else if (!_isAuthenticated)
+            throw new NotConnectedException(
+                "Not connected. Call ConnectAsync() first, or set AutoConnect to true in the constructor.");
 
         await _sendLock.WaitAsync(ct).ConfigureAwait(false);
 
@@ -217,6 +180,7 @@ public class RconClient : IRconClient
             _stream = null;
             _tcp = null;
             _textBuffer.Clear();
+            _isAuthenticated = false;
 
             if (acquiredSend) _sendLock.Release();
 
@@ -450,5 +414,44 @@ public class RconClient : IRconClient
         var bytes = _encoding.GetBytes(text);
         await _stream!.WriteAsync(bytes, 0, bytes.Length, ct).ConfigureAwait(false);
         await _stream.FlushAsync(ct).ConfigureAwait(false);
+    }
+
+    private async Task EnsureConnectedAsync(CancellationToken ct)
+    {
+        if (_isAuthenticated) return;
+
+        await _connectLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            if (_isAuthenticated) return;
+
+            if (_stream is null)
+            {
+                _tcp = new TcpClient();
+                await _tcp.ConnectAsync(_host, _port, ct).ConfigureAwait(false);
+                _stream = _tcp.GetStream();
+            }
+
+            TouchActivity();
+
+            await ReadUntilSubstringAsync("Password: ", ct).ConfigureAwait(false);
+            _textBuffer.Clear();
+            await SendRawAsync(_password + "\n", ct).ConfigureAwait(false);
+
+            var authLine = await ReadLineAsync(ct).ConfigureAwait(false);
+            if (!authLine.StartsWith("Authenticated=", StringComparison.OrdinalIgnoreCase) ||
+                authLine.Contains("Authenticated=0", StringComparison.OrdinalIgnoreCase))
+            {
+                await DisconnectCoreAsync(ct).ConfigureAwait(false);
+                throw new InvalidPasswordException("Invalid password.");
+            }
+
+            _isAuthenticated = true;
+            StartIdleMonitor();
+        }
+        finally
+        {
+            _connectLock.Release();
+        }
     }
 }
