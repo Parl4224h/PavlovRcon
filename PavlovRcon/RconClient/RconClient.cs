@@ -1,4 +1,4 @@
-﻿using System.Buffers;
+using System.Buffers;
 using System.Net.Sockets;
 using System.Security.Cryptography;
 using System.Text;
@@ -23,7 +23,6 @@ public class RconClient : IRconClient
     private readonly bool _autoConnect;
     private readonly TimeSpan _commandTimeout;
     private readonly Encoding _encoding = new UTF8Encoding(false);
-
     // Idle Tracking
     private long _lastRequestTick;
     private NetworkStream? _stream;
@@ -97,7 +96,6 @@ public class RconClient : IRconClient
         else if (!_isAuthenticated)
             throw new NotConnectedException(
                 "Not connected. Call ConnectAsync() first, or set AutoConnect to true in the constructor.");
-
         await _sendLock.WaitAsync(ct).ConfigureAwait(false);
 
         try
@@ -106,9 +104,7 @@ public class RconClient : IRconClient
             timeoutCts.CancelAfter(_commandTimeout);
 
             TouchActivity();
-
             await SendRawAsync(rconCommand.BuildCommand() + '\n', timeoutCts.Token).ConfigureAwait(false);
-
             var json = await ReadJsonObjectAsync(timeoutCts.Token).ConfigureAwait(false);
 
             var result = JsonSerializer.Deserialize<TResponse>(json, new JsonSerializerOptions
@@ -148,15 +144,27 @@ public class RconClient : IRconClient
         _connectLock.Dispose();
     }
 
-    private async Task DisconnectCoreAsync(CancellationToken ct)
+    private async Task DisconnectCoreAsync(CancellationToken ct, bool calledFromIdleMonitor = false)
     {
         var monitorTask = StopIdleMonitorAndGetTask();
 
         var acquiredSend = false;
         try
         {
-            await _sendLock.WaitAsync(CancellationToken.None).ConfigureAwait(false);
-            acquiredSend = true;
+            // Prevent disconnect from waiting forever if a send is stuck in I/O.
+            var sendLockTimeout = _commandTimeout <= TimeSpan.Zero ? TimeSpan.FromSeconds(5) : _commandTimeout;
+            using var sendLockCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+            sendLockCts.CancelAfter(sendLockTimeout);
+
+            try
+            {
+                await _sendLock.WaitAsync(sendLockCts.Token).ConfigureAwait(false);
+                acquiredSend = true;
+            }
+            catch (OperationCanceledException) when (!ct.IsCancellationRequested)
+            {
+                // Timed out acquiring send lock; continue with forced socket teardown.
+            }
 
             if (_stream is not null)
             {
@@ -168,10 +176,8 @@ public class RconClient : IRconClient
                 {
                     // ignored
                 }
-
                 await _stream.DisposeAsync().ConfigureAwait(false);
             }
-
             _tcp?.Close();
             _tcp?.Dispose();
         }
@@ -182,9 +188,12 @@ public class RconClient : IRconClient
             _textBuffer.Clear();
             _isAuthenticated = false;
 
-            if (acquiredSend) _sendLock.Release();
+            if (acquiredSend)
+            {
+                _sendLock.Release();
+            }
 
-            if (monitorTask is not null)
+            if (monitorTask is not null && !calledFromIdleMonitor)
                 try
                 {
                     await monitorTask.ConfigureAwait(false);
@@ -238,7 +247,8 @@ public class RconClient : IRconClient
 
                         if (_stream is not null && elapsed >= (long)_idleDisconnectTimeout.TotalMilliseconds)
                         {
-                            await DisconnectCoreAsync(CancellationToken.None).ConfigureAwait(false);
+                            await DisconnectCoreAsync(CancellationToken.None, calledFromIdleMonitor: true)
+                                .ConfigureAwait(false);
                             return;
                         }
                     }
@@ -395,7 +405,9 @@ public class RconClient : IRconClient
             ct.ThrowIfCancellationRequested();
 
             if (_textBuffer.ToString().Contains(substring, StringComparison.Ordinal))
+            {
                 return;
+            }
 
             // Read more data into _textBuffer; expected to observe ct (either via await or throwing)
             await ReadMoreTextAsync(ct).ConfigureAwait(false);
@@ -420,7 +432,18 @@ public class RconClient : IRconClient
     {
         if (_isAuthenticated) return;
 
-        await _connectLock.WaitAsync(ct).ConfigureAwait(false);
+        using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+        var connectTimeout = _commandTimeout <= TimeSpan.Zero ? TimeSpan.FromSeconds(5) : _commandTimeout;
+        timeoutCts.CancelAfter(connectTimeout);
+        var connectToken = timeoutCts.Token;
+        try
+        {
+            await _connectLock.WaitAsync(connectToken).ConfigureAwait(false);
+        }
+        catch (OperationCanceledException) when (!ct.IsCancellationRequested)
+        {
+            throw new TimeoutException("Timed out waiting for connection lock");
+        }
         try
         {
             if (_isAuthenticated) return;
@@ -428,17 +451,17 @@ public class RconClient : IRconClient
             if (_stream is null)
             {
                 _tcp = new TcpClient();
-                await _tcp.ConnectAsync(_host, _port, ct).ConfigureAwait(false);
+                await _tcp.ConnectAsync(_host, _port, connectToken).ConfigureAwait(false);
                 _stream = _tcp.GetStream();
             }
 
             TouchActivity();
 
-            await ReadUntilSubstringAsync("Password: ", ct).ConfigureAwait(false);
+            await ReadUntilSubstringAsync("Password: ", connectToken).ConfigureAwait(false);
             _textBuffer.Clear();
-            await SendRawAsync(_password + "\n", ct).ConfigureAwait(false);
+            await SendRawAsync(_password + "\n", connectToken).ConfigureAwait(false);
 
-            var authLine = await ReadLineAsync(ct).ConfigureAwait(false);
+            var authLine = await ReadLineAsync(connectToken).ConfigureAwait(false);
             if (!authLine.StartsWith("Authenticated=", StringComparison.OrdinalIgnoreCase) ||
                 authLine.Contains("Authenticated=0", StringComparison.OrdinalIgnoreCase))
             {
@@ -449,9 +472,14 @@ public class RconClient : IRconClient
             _isAuthenticated = true;
             StartIdleMonitor();
         }
+        catch (OperationCanceledException) when (!ct.IsCancellationRequested)
+        {
+            await DisconnectCoreAsync(CancellationToken.None).ConfigureAwait(false);
+            throw new TimeoutException("Connect/authentication timed out");
+        }
         finally
         {
             _connectLock.Release();
         }
-    }
-}
+    }}
+
