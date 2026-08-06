@@ -1,22 +1,22 @@
 name: Publish packages
 
 on:
-  push:
-    tags:
-      - 'v*'
-  workflow_dispatch:
+  release:
+    types: [published]
 
 permissions:
   contents: read
-  packages: write
+  id-token: write
 
 jobs:
   pack-and-publish:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout
+      - name: Checkout release tag
         uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.release.tag_name }}
 
       - name: Setup .NET
         uses: actions/setup-dotnet@v4
@@ -25,44 +25,20 @@ jobs:
           cache: true
           cache-dependency-path: '**/packages.lock.json'
 
-      - name: Extract version from tag
+      - name: Extract version from release tag
         id: get_version
         shell: bash
         run: |
-          ref="${GITHUB_REF##*/}"   # e.g., v1.2.3
-          ver="${ref#v}"            # -> 1.2.3
+          ref='${{ github.event.release.tag_name }}' # e.g., v1.2.3
+          ver="${ref#v}"                            # -> 1.2.3
           echo "version=$ver" >> "$GITHUB_OUTPUT"
-
-      - name: Create CI NuGet.config
-        run: |
-          cat > ./nuget.ci.config <<EOF
-          <?xml version="1.0" encoding="utf-8"?>
-          <configuration>
-            <packageSources>
-              <add key="nuget.org" value="https://api.nuget.org/v3/index.json" />
-            </packageSources>
-          </configuration>
-          EOF
-
-      - name: Add GitHub Packages source (isolated)
-        env:
-          OWNER:  ${{ github.repository_owner }}
-          ACTOR:  ${{ github.actor }}
-          TOKEN:  ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          dotnet nuget add source "https://nuget.pkg.github.com/${OWNER}/index.json" \
-            --username "$ACTOR" \
-            --password "$TOKEN" \
-            --store-password-in-clear-text \
-            --name "github-${OWNER}" \
-            --configfile ./nuget.ci.config
 
       # Ensure cache dir exists so setup-dotnet's cache post-step doesn't error
       - name: Ensure NuGet cache directory exists
         run: mkdir -p "$HOME/.nuget/packages"
 
       - name: Restore (locked)
-        run: dotnet restore --nologo --locked-mode --configfile ./nuget.ci.config
+        run: dotnet restore --nologo --locked-mode
 
       - name: Pack (all packable projects in solution)
         run: |
@@ -76,23 +52,20 @@ jobs:
       - name: List artifacts
         run: ls -la ./artifacts
 
-      # Use an API key to silence GitHub Packages warnings
-      - name: Push packages to GitHub Packages
+      - name: Sign in to NuGet.org with trusted publishing
+        uses: NuGet/login@v1
+        id: nuget-login
+        with:
+          user: ${{ secrets.NUGET_USER }}
+
+      - name: Push packages to NuGet.org
         env:
-          NUGET_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          NUGET_API_KEY: ${{ steps.nuget-login.outputs.NUGET_API_KEY }}
         run: |
           shopt -s nullglob
-          for pkg in ./artifacts/*.nupkg; do
+          for pkg in ./artifacts/*.nupkg ./artifacts/*.snupkg; do
             dotnet nuget push "$pkg" \
-              --source "github-${{ github.repository_owner }}" \
-              --configfile ./nuget.ci.config \
-              --api-key "$NUGET_AUTH_TOKEN" \
-              --skip-duplicate
-          done
-          for sym in ./artifacts/*.snupkg; do
-            dotnet nuget push "$sym" \
-              --source "github-${{ github.repository_owner }}" \
-              --configfile ./nuget.ci.config \
-              --api-key "$NUGET_AUTH_TOKEN" \
+              --source "https://api.nuget.org/v3/index.json" \
+              --api-key "$NUGET_API_KEY" \
               --skip-duplicate
           done
