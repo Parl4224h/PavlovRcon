@@ -34,4 +34,4 @@ The client supports connection management, command timeouts, and extension metho
 
 ## License
 
-This project is licensed under the [GNU Affero General Public License v3.0](LICENSE).
+This project is licensed under the [MIT License](LICENSE).
