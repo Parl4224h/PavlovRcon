@@ -91,39 +91,54 @@ public class RconClient : IRconClient
     public async Task<TResponse> SendCommandAsync<TResponse>(IRconCommand<TResponse> rconCommand,
         CancellationToken ct = default)
     {
-        if (_autoConnect)
-            await EnsureConnectedAsync(ct).ConfigureAwait(false);
-        else if (!_isAuthenticated)
-            throw new NotConnectedException(
-                "Not connected. Call ConnectAsync() first, or set AutoConnect to true in the constructor.");
-        await _sendLock.WaitAsync(ct).ConfigureAwait(false);
-
+        // Use the same lock order as explicit and idle disconnects. Hold the connection
+        // lock through the command so queued callers cannot retain stale authentication.
+        await _connectLock.WaitAsync(ct).ConfigureAwait(false);
         try
         {
-            using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
-            timeoutCts.CancelAfter(_commandTimeout);
+            if (_autoConnect)
+                await EnsureConnectedCoreAsync(ct).ConfigureAwait(false);
+            else if (!_isAuthenticated)
+                throw new NotConnectedException(
+                    "Not connected. Call ConnectAsync() first, or set AutoConnect to true in the constructor.");
+            await _sendLock.WaitAsync(ct).ConfigureAwait(false);
 
-            TouchActivity();
-            await SendRawAsync(rconCommand.BuildCommand() + '\n', timeoutCts.Token).ConfigureAwait(false);
-            var json = await ReadJsonObjectAsync(timeoutCts.Token).ConfigureAwait(false);
-
-            var result = JsonSerializer.Deserialize<TResponse>(json, new JsonSerializerOptions
+            try
             {
-                PropertyNameCaseInsensitive = true
-            });
+                using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
+                timeoutCts.CancelAfter(_commandTimeout);
 
-            if (result is null) throw new InvalidResponseException($"Response was not valid JSON: {json}");
+                TouchActivity();
+                await SendRawAsync(rconCommand.BuildCommand() + '\n', timeoutCts.Token).ConfigureAwait(false);
+                var json = await ReadJsonObjectAsync(timeoutCts.Token).ConfigureAwait(false);
 
-            TouchActivity();
-            return result;
-        }
-        catch (OperationCanceledException) when (!ct.IsCancellationRequested)
-        {
-            throw new TimeoutException("Command timed out");
+                var result = JsonSerializer.Deserialize<TResponse>(json, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+
+                if (result is null) throw new InvalidResponseException($"Response was not valid JSON: {json}");
+
+                TouchActivity();
+                return result;
+            }
+            catch (Exception exception) when (exception is IOException or SocketException or OperationCanceledException)
+            {
+                // A partial response or write leaves the protocol position unknown. Never replay
+                // this command; let the next operation establish and authenticate a new connection.
+                ResetTransport();
+                if (exception is OperationCanceledException && !ct.IsCancellationRequested)
+                    throw new TimeoutException("Command timed out", exception);
+                throw;
+            }
+            finally
+            {
+                _sendLock.Release();
+            }
         }
         finally
         {
-            _sendLock.Release();
+            _connectLock.Release();
         }
     }
 
@@ -430,20 +445,26 @@ public class RconClient : IRconClient
 
     private async Task EnsureConnectedAsync(CancellationToken ct)
     {
+        await _connectLock.WaitAsync(ct).ConfigureAwait(false);
+        try
+        {
+            await EnsureConnectedCoreAsync(ct).ConfigureAwait(false);
+        }
+        finally
+        {
+            _connectLock.Release();
+        }
+    }
+
+    // The caller holds _connectLock.
+    private async Task EnsureConnectedCoreAsync(CancellationToken ct)
+    {
         if (_isAuthenticated) return;
 
         using var timeoutCts = CancellationTokenSource.CreateLinkedTokenSource(ct);
         var connectTimeout = _commandTimeout <= TimeSpan.Zero ? TimeSpan.FromSeconds(5) : _commandTimeout;
         timeoutCts.CancelAfter(connectTimeout);
         var connectToken = timeoutCts.Token;
-        try
-        {
-            await _connectLock.WaitAsync(connectToken).ConfigureAwait(false);
-        }
-        catch (OperationCanceledException) when (!ct.IsCancellationRequested)
-        {
-            throw new TimeoutException("Timed out waiting for connection lock");
-        }
         try
         {
             if (_isAuthenticated) return;
@@ -465,7 +486,6 @@ public class RconClient : IRconClient
             if (!authLine.StartsWith("Authenticated=", StringComparison.OrdinalIgnoreCase) ||
                 authLine.Contains("Authenticated=0", StringComparison.OrdinalIgnoreCase))
             {
-                await DisconnectCoreAsync(ct).ConfigureAwait(false);
                 throw new InvalidPasswordException("Invalid password.");
             }
 
@@ -477,9 +497,24 @@ public class RconClient : IRconClient
             await DisconnectCoreAsync(CancellationToken.None).ConfigureAwait(false);
             throw new TimeoutException("Connect/authentication timed out");
         }
-        finally
+        catch
         {
-            _connectLock.Release();
+            await DisconnectCoreAsync(CancellationToken.None).ConfigureAwait(false);
+            throw;
         }
-    }}
+    }
 
+    // The caller holds both connection and send locks.
+    private void ResetTransport()
+    {
+        StopIdleMonitorAndGetTask();
+        try { _stream?.Dispose(); }
+        catch { /* Preserve the command failure. */ }
+        try { _tcp?.Dispose(); }
+        catch { /* Preserve the command failure. */ }
+        _stream = null;
+        _tcp = null;
+        _textBuffer.Clear();
+        _isAuthenticated = false;
+    }
+}

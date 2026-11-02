@@ -1,3 +1,4 @@
 <Solution>
   <Project Path="PavlovRcon/PavlovRcon.csproj" />
+  <Project Path="PavlovRcon.Tests/PavlovRcon.Tests.csproj" />
 </Solution>
