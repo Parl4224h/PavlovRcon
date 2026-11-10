@@ -29,6 +29,8 @@ The client supports connection management, command timeouts, and extension metho
 
 ## Requirements
 
+The package targets `net10.0` and `net11.0`.
+
 - .NET 10 or later
 - A reachable Pavlov server with RCON enabled
 
